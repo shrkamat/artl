@@ -15,4 +15,3 @@ class GqlConnection {
 
   static GqlConnection get instance => _inst;
 }
-

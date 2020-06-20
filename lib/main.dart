@@ -68,9 +68,10 @@ class _HomePageState extends State<HomePage> {
               return ListTile(
                 title: Text(continents[index]['name']),
                 onTap: () {
-                  Navigator.push(
-                      context, MaterialPageRoute(builder: (context) {
-                        return CountryPage();
+                  Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    return Country(
+                      countryCode: continents[index]['code'],
+                    );
                   }));
                 },
               );
