@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:gql/ast.dart';
+
+import "package:artl/gql_connection.dart";
+import 'package:artl/country.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -19,19 +20,6 @@ query {
 }
 """;
 
-String qCountry = r"""
-query {
-  continent(code: $code) {
-    code
-    name
-    countries {
-      code
-      name
-    }
-  }
-}
-""";
-
 class ArtlApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -43,9 +31,12 @@ class ArtlApp extends StatelessWidget {
           link: link as Link,
           cache: OptimisticCache(dataIdFromObject: typenameDataIdFromObject)),
     );
+
+    var conn = GqlConnection(client);
+
     return GraphQLProvider(
       child: HomePage(),
-      client: client,
+      client: conn.client,
     );
   }
 }
@@ -74,9 +65,14 @@ class _HomePageState extends State<HomePage> {
 
           return ListView.builder(
             itemBuilder: (BuildContext context, int index) {
-              print(continents[index]['name']);
               return ListTile(
                 title: Text(continents[index]['name']),
+                onTap: () {
+                  Navigator.push(
+                      context, MaterialPageRoute(builder: (context) {
+                        return CountryPage();
+                  }));
+                },
               );
             },
             itemCount: continents.length,
